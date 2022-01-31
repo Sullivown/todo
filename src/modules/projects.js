@@ -1,33 +1,24 @@
-function project(name) {
-    let tasks = [];
+const projects = (() => {
+    let projects = [];
 
-    // Get attributes
-    const getName = () => name;
-    const getTasks = () => tasks;
+    const getProjects = () => projects;
 
-    // Edit project
-    const editName = (newName) => {
-        name = newName;
+    // Add project
+    const addProject = (newProject) => {
+        projects.push(newProject);
     }
 
-    // Add new task
-    const addTask = (task) => {
-        tasks.push(task);
-    }
-
-    // Delete task
-    const deleteTask = (task) => {
-        const index = tasks.indexOf(task);
-        tasks.splice(index, 1);
+    // Delete project
+    const deleteProject = (project) => {
+        const index = projects.indexOf(project);
+        projects.splice(index, 1);
     }
 
     return {
-        getName,
-        getTasks,
-        editName,
-        addTask,
-        deleteTask,
+        getProjects,
+        addProject,
+        deleteProject,
     }
-}
+})()
 
-export default project;
+export default projects;
