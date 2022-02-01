@@ -1,0 +1,30 @@
+{
+    "projects": [
+        {
+            "name": "Project 1",
+            "tasks": [
+                {
+                    "name": "Task 1",
+                    "dueDate": "01/02/2023",
+                    "priority": "medium",
+                    "complete": false,
+                    "subtasks": []
+                },
+                {
+                    "name": "Task 2",
+                    "dueDate": "02/03/2024",
+                    "priority": "high",
+                    "complete": true,
+                    "subtasks": []
+                },
+                {
+                    "name": "Task 3",
+                    "dueDate": "12/05/2022",
+                    "priority": "low",
+                    "complete": false,
+                    "subtasks": []
+                }
+            ]
+        }
+    ]
+}

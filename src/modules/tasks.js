@@ -1,7 +1,9 @@
-function task(name, dueDate) {
-    let priority = 'medium';
-    let subTasks = [];
-    let complete = false;
+function task(taskObj) {
+    let name = taskObj.name;
+    let dueDate = taskObj.dueDate;
+    let priority = taskObj.priority || 'medium';
+    let subTasks = taskObj.subTasks || [];
+    let complete = taskObj.complete || false;
  
     // Get attributes
     const getName = () => name;

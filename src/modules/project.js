@@ -1,9 +1,11 @@
-function project(name) {
+function project(projectObj) {
+    let name = projectObj.name;
     let tasks = [];
 
     // Get attributes
     const getName = () => name;
     const getTasks = () => tasks;
+    const getDetails = () => { return { name, tasks } };
 
     // Edit project
     const editName = (newName) => {
@@ -24,6 +26,7 @@ function project(name) {
     return {
         getName,
         getTasks,
+        getDetails,
         editName,
         addTask,
         deleteTask,
