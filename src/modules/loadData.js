@@ -1,14 +1,14 @@
-import * as defaultData from '../resources/defaultData.json';
+import * as defaultData from '../assets/defaultData.json';
 import projects from './projects';
 import project from './project';
 import task from './tasks';
+import PubSub from 'pubsub-js';
 
 function getData() {
     const localStorageData = null;
 
     // If local storage exists, load from there else use default data
     let data = localStorageData || defaultData.default;
-
     return data;
 }
 
@@ -25,6 +25,10 @@ function loadData() {
             newProject.addTask(newTask);
         }
     }
+
+    console.log('Data has been loaded!');
 }
+
+PubSub.subscribe('DOMLoaded', loadData);
 
 export default loadData;
