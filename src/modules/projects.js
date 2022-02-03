@@ -16,14 +16,14 @@ const projects = (() => {
     // Add project
     const addProject = (newProject) => {
         projects.push(newProject);
-        PubSub.publish('projectsChanged', projects);
+        PubSub.publish('projectsChanged', { currentProject, projects });
     }
 
     // Delete project
     const deleteProject = (project) => {
         const index = projects.indexOf(project);
         projects.splice(index, 1);
-        PubSub.publish('projectsChanged', projects);
+        PubSub.publish('projectsChanged', { currentProject, projects });
     }
 
     return {

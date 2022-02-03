@@ -36,11 +36,13 @@ const displayController = (function() {
         const projectsDiv = document.getElementById('projects');
         projectsDiv.innerHTML = '';
 
-        for (const project in data) {
-            projectsDiv.textContent += data[project].getName();
+        const { currentProject, projects } = data;
+
+        for (const project in projects) {
+            projectsDiv.textContent += projects[project].getName();
         }
 
-        renderTasks(data[0]);
+        renderTasks(projects[currentProject]);
     }
 
     const renderTasks = (project) => {
