@@ -25,6 +25,32 @@
                     "subtasks": []
                 }
             ]
+        },
+        {
+            "name": "Project 2",
+            "tasks": [
+                {
+                    "name": "Task 12",
+                    "dueDate": "01/02/2023",
+                    "priority": "medium",
+                    "complete": false,
+                    "subtasks": []
+                },
+                {
+                    "name": "Task 22",
+                    "dueDate": "02/03/2024",
+                    "priority": "high",
+                    "complete": true,
+                    "subtasks": []
+                },
+                {
+                    "name": "Task 32",
+                    "dueDate": "12/05/2022",
+                    "priority": "low",
+                    "complete": false,
+                    "subtasks": []
+                }
+            ]
         }
     ]
 }

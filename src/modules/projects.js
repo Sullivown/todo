@@ -2,13 +2,12 @@ import PubSub from "pubsub-js";
 
 const projects = (() => {
     let projects = [];
-
-    // Tracker variables
     let currentProject = 0;
 
     const updateCurrentProject = (project) => {
         currentProject = project;
-        PubSub.publish('currentProjectChanged');
+        const projectObj = projects[currentProject];
+        PubSub.publish('currentProjectChanged', { currentProject, projectObj });
     }
     
     const getProjects = () => projects;
@@ -25,6 +24,12 @@ const projects = (() => {
         projects.splice(index, 1);
         PubSub.publish('projectsChanged', { currentProject, projects });
     }
+
+    //PubSub
+    PubSub.subscribe('projectClicked', (msg, data) => {
+        updateCurrentProject(data);
+    }
+    )
 
     return {
         getProjects,

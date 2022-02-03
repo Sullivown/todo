@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js';
+import projects from './projects';
 
 const displayController = (function() {
     // Cache DOM
@@ -14,7 +15,14 @@ const displayController = (function() {
 
         const projects = document.createElement('div');
         projects.setAttribute('id', 'projects');
-        projects.textContent = 'This is the projects area';
+        
+        const projectsList = document.createElement('ul');
+        projectsList.setAttribute('id', 'projects-list');
+        projects.appendChild(projectsList);
+
+        const addProjectButton = document.createElement('button');
+        addProjectButton.textContent = 'Add New Project';
+        projects.appendChild(addProjectButton);
 
         const tasks = document.createElement('div');
         tasks.setAttribute('id', 'tasks');
@@ -32,26 +40,24 @@ const displayController = (function() {
         PubSub.publish('initRenderComplete');
     }
 
-    const renderProjects = (msg, data) => {
-        const projectsDiv = document.getElementById('projects');
-        projectsDiv.innerHTML = '';
-
-        const { currentProject, projects } = data;
+    const renderProjects = (projects) => {
+        const projectsList = document.getElementById('projects-list');
+        projectsList.innerHTML = '';
 
         for (const project in projects) {
-            projectsDiv.textContent += projects[project].getName();
-        }
+            const projectLi = document.createElement('li');
+            projectLi.dataset.projectId = project;
+            projectLi.textContent += projects[project].getName();
+            projectLi.addEventListener('click', handleClick);
 
-        renderTasks(projects[currentProject]);
+            projectsList.appendChild(projectLi);
+        }
     }
 
-    const renderTasks = (project) => {
+    const renderTasks = (tasks) => {
         const tasksDiv = document.getElementById('tasks');
         tasksDiv.innerHTML = '';
-
         const taskList = document.createElement('ul');
-
-        const tasks = project.getTasks();
 
         for (const task in tasks) {
             const taskLi = document.createElement('li');
@@ -63,9 +69,29 @@ const displayController = (function() {
         tasksDiv.appendChild(taskList);
     }
 
+    // Click handlers
+    const handleClick = (event) => {
+        console.log(event.target.dataset.projectId);
+        PubSub.publish('projectClicked', parseInt(event.target.dataset.projectId))
+    }
+
     // Pub/Sub
     PubSub.subscribe('DOMLoaded', initRender);
-    PubSub.subscribe('projectsChanged', renderProjects);
+
+    PubSub.subscribe('projectsChanged', (msg, data) => {
+        renderProjects(data.projects);
+    }
+
+    );
+    PubSub.subscribe('projectsChanged', (msg, data) => {
+        const { currentProject, projects } = data;
+        renderTasks(data.projects[currentProject].getTasks());
+    });
+
+    PubSub.subscribe('currentProjectChanged', (msg, data) => {
+        const { currentProject, projectObj } = data;
+        renderTasks(projectObj.getTasks());
+    });
 
     return {
         renderProjects,
