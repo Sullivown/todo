@@ -1,7 +1,7 @@
 import * as defaultData from '../assets/defaultData.json';
 import projects from './projects';
 import project from './project';
-import task from './tasks';
+import task from './task';
 import PubSub from 'pubsub-js';
 
 function getData() {
@@ -27,8 +27,9 @@ function loadData() {
     }
 
     console.log('Data has been loaded!');
+    PubSub.publish('dataLoaded');
 }
 
-PubSub.subscribe('DOMLoaded', loadData);
+PubSub.subscribe('initRenderComplete', loadData);
 
 export default loadData;

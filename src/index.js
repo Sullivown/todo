@@ -4,5 +4,6 @@ import PubSub from 'pubsub-js';
 import './style.css';
 
 document.addEventListener('DOMContentLoaded', () => {
-    PubSub.publish('DOMLoaded')}
+        PubSub.publish('DOMLoaded');
+    }
 );
