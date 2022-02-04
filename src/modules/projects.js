@@ -1,5 +1,6 @@
 import PubSub from "pubsub-js";
 import project from "./project";
+import task from "./task";
 
 const projects = (() => {
     let projects = [];
@@ -37,6 +38,14 @@ const projects = (() => {
             addProject(newProject);
         }
     )
+
+    PubSub.subscribe('addTaskClicked', (msg, data) => {
+        console.log('pubsub working');
+        const currentProjectObj = projects[currentProject];
+        const newTask = task({ 'name': data });
+
+        currentProjectObj.addTask(newTask);
+    })
 
     return {
         getProjects,

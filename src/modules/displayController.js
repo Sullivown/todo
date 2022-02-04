@@ -1,7 +1,4 @@
 import PubSub from 'pubsub-js';
-import projects from './projects';
-import task from './task';
-
 const displayController = (function() {
     // Cache DOM
     const body = document.querySelector('body');
@@ -13,6 +10,7 @@ const displayController = (function() {
         body.appendChild(header);
 
         const main = document.createElement('main');
+        body.appendChild(main);
 
         const projects = document.createElement('div');
         projects.setAttribute('id', 'projects');
@@ -38,8 +36,6 @@ const displayController = (function() {
         main.appendChild(projects);
         main.appendChild(tasks);
 
-        body.appendChild(main);
-
         const footer = document.createElement('footer');
         footer.textContent = 'This is the footer';
         body.appendChild(footer);
@@ -64,6 +60,19 @@ const displayController = (function() {
     const renderTasks = (tasks) => {
         const tasksDiv = document.getElementById('tasks');
         tasksDiv.innerHTML = '';
+        
+        const addTaskDiv = document.createElement('div');
+        tasksDiv.appendChild(addTaskDiv);
+
+        const addTaskInput = document.createElement('input');
+        addTaskInput.setAttribute('id', 'add-task-input');
+        addTaskDiv.appendChild(addTaskInput);
+
+        const addTaskButton = document.createElement('button');
+        addTaskButton.textContent = 'Add New Task'
+        addTaskButton.addEventListener('click', handleAddTaskClick);
+        addTaskDiv.appendChild(addTaskButton);
+
         const taskList = document.createElement('ul');
         taskList.setAttribute('id', 'task-list');
 
@@ -96,6 +105,12 @@ const displayController = (function() {
         addProjectInput.value = '';
     }
 
+    const handleAddTaskClick = () => {
+        const addTaskInput = document.getElementById('add-task-input');
+        PubSub.publish('addTaskClicked', addTaskInput.value);
+        addTaskInput.value = '';
+    }
+
     // Pub/Sub
     PubSub.subscribe('DOMLoaded', initRender);
 
@@ -113,6 +128,10 @@ const displayController = (function() {
         const { currentProject, projectObj } = data;
         renderTasks(projectObj.getTasks());
     });
+
+    PubSub.subscribe('tasksChanged', (msg, data) => {
+        renderTasks(data);
+    })
 
     return {
         renderProjects,

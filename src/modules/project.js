@@ -1,3 +1,5 @@
+import PubSub from "pubsub-js";
+
 function project(projectObj) {
     let name = projectObj.name;
     let tasks = [];
@@ -15,6 +17,7 @@ function project(projectObj) {
     // Add new task
     const addTask = (task) => {
         tasks.push(task);
+        PubSub.publish('tasksChanged', tasks);
     }
 
     // Delete task

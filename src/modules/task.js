@@ -1,6 +1,6 @@
 function task(taskObj) {
     let name = taskObj.name;
-    let dueDate = taskObj.dueDate;
+    let dueDate = taskObj.dueDate || 'No Due Date';
     let priority = taskObj.priority || 'medium';
     let subTasks = taskObj.subTasks || [];
     let complete = taskObj.complete || false;
