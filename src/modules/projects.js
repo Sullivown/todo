@@ -1,4 +1,5 @@
 import PubSub from "pubsub-js";
+import project from "./project";
 
 const projects = (() => {
     let projects = [];
@@ -27,8 +28,14 @@ const projects = (() => {
 
     //PubSub
     PubSub.subscribe('projectClicked', (msg, data) => {
-        updateCurrentProject(data);
-    }
+            updateCurrentProject(data);
+        }
+    )
+
+    PubSub.subscribe('addProjectClicked', (msg, data) => {
+            const newProject = project({ 'name': data });
+            addProject(newProject);
+        }
     )
 
     return {

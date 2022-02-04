@@ -20,8 +20,14 @@ const displayController = (function() {
         projectsList.setAttribute('id', 'projects-list');
         projects.appendChild(projectsList);
 
+        const addProjectInput = document.createElement('input');
+        addProjectInput.setAttribute('type', 'text');
+        addProjectInput.setAttribute('id', 'add-project-input');
+        projects.appendChild(addProjectInput);
+
         const addProjectButton = document.createElement('button');
         addProjectButton.textContent = 'Add New Project';
+        addProjectButton.addEventListener('click', handleAddProjectClick);
         projects.appendChild(addProjectButton);
 
         const tasks = document.createElement('div');
@@ -48,7 +54,7 @@ const displayController = (function() {
             const projectLi = document.createElement('li');
             projectLi.dataset.projectId = project;
             projectLi.textContent += projects[project].getName();
-            projectLi.addEventListener('click', handleClick);
+            projectLi.addEventListener('click', handleProjectClick);
 
             projectsList.appendChild(projectLi);
         }
@@ -70,9 +76,14 @@ const displayController = (function() {
     }
 
     // Click handlers
-    const handleClick = (event) => {
-        console.log(event.target.dataset.projectId);
+    const handleProjectClick = (event) => {
         PubSub.publish('projectClicked', parseInt(event.target.dataset.projectId))
+    }
+
+    const handleAddProjectClick = () => {
+        const addProjectInput = document.getElementById('add-project-input');
+        PubSub.publish('addProjectClicked', addProjectInput.value);
+        addProjectInput.value = '';
     }
 
     // Pub/Sub
@@ -80,9 +91,9 @@ const displayController = (function() {
 
     PubSub.subscribe('projectsChanged', (msg, data) => {
         renderProjects(data.projects);
-    }
-
+        }
     );
+    
     PubSub.subscribe('projectsChanged', (msg, data) => {
         const { currentProject, projects } = data;
         renderTasks(data.projects[currentProject].getTasks());
