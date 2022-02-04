@@ -33,9 +33,35 @@ main {
     background-color: antiquewhite;
 }
 
+#projects-list {
+    list-style-type: none;
+    padding-inline-start: 0px;
+}
+
+#projects-list li {
+    display: flex;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: silver;
+    border-radius: 5px;
+}
+
 #tasks {
     flex: 4;
     background-color: aquamarine;
+}
+
+#task-list {
+    padding-inline-start: 0px;
+}
+
+#task-list li {
+    display: flex;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: silver;
+    border-radius: 5px;
+    justify-content: space-between;
 }
 
 footer {

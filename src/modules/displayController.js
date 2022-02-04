@@ -1,5 +1,6 @@
 import PubSub from 'pubsub-js';
 import projects from './projects';
+import task from './task';
 
 const displayController = (function() {
     // Cache DOM
@@ -64,10 +65,19 @@ const displayController = (function() {
         const tasksDiv = document.getElementById('tasks');
         tasksDiv.innerHTML = '';
         const taskList = document.createElement('ul');
+        taskList.setAttribute('id', 'task-list');
 
         for (const task in tasks) {
+            const currentTask = tasks[task];
             const taskLi = document.createElement('li');
-            taskLi.textContent += tasks[task].getName();
+            
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = currentTask.getName();
+            taskLi.appendChild(nameSpan);
+
+            const dueDateSpan = document.createElement('span');
+            dueDateSpan.textContent = currentTask.getDueDate();
+            taskLi.appendChild(dueDateSpan);
 
             taskList.appendChild(taskLi)
         }
