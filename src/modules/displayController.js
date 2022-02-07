@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js';
+
 const displayController = (function() {
     // Cache DOM
     const body = document.querySelector('body');
@@ -83,17 +84,33 @@ const displayController = (function() {
         taskList.setAttribute('id', 'task-list');
 
         for (const task in tasks) {
-            const currentTask = tasks[task];
+            const currentTask = tasks[task].getDetails();
             const taskLi = document.createElement('li');
+            taskLi.dataset.taskId = task;
+            taskLi.classList.add('task-li');
+
+            const completedCheckbox = document.createElement('input');
+            completedCheckbox.setAttribute('type', 'checkbox');
+            completedCheckbox.addEventListener('click', handleTaskCompletedClick);
+            taskLi.appendChild(completedCheckbox);
             
             const nameSpan = document.createElement('span');
-            nameSpan.textContent = currentTask.getName();
+            nameSpan.textContent = currentTask.name;
             taskLi.appendChild(nameSpan);
 
             const dueDateSpan = document.createElement('span');
-            dueDateSpan.textContent = currentTask.getDueDate();
+            dueDateSpan.classList.add('due-date-span');
+            dueDateSpan.textContent = currentTask.dueDate;
             taskLi.appendChild(dueDateSpan);
 
+            // Task complete/incomplete logic
+            if (currentTask.complete) {
+                completedCheckbox.checked = true;
+                taskLi.classList.add('task-complete');
+            };
+
+            
+            
             taskList.appendChild(taskLi)
         }
 
@@ -118,8 +135,13 @@ const displayController = (function() {
             'name': addTaskNameInput.value,
             'dueDate': addTaskDateInput.value
         });
-        console.log('Add Task clicked');
         addTaskNameInput.value = '';
+    }
+
+    const handleTaskCompletedClick = (event) => {
+        PubSub.publish('completeTaskClicked', {
+            'id': event.target.parentNode.dataset.taskId
+        })
     }
 
     // Pub/Sub

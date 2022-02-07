@@ -55,13 +55,22 @@ main {
     padding-inline-start: 0px;
 }
 
-#task-list li {
+.task-li {
     display: flex;
+    align-items: center;
     padding: 1rem;
     margin: 1rem;
     background-color: silver;
     border-radius: 5px;
-    justify-content: space-between;
+    gap: 10px;
+}
+
+.due-date-span {
+    margin-left: auto;
+}
+
+.task-complete {
+    background-color: beige;
 }
 
 footer {

@@ -1,13 +1,15 @@
+import { format } from 'date-fns';
+
 function task(taskObj) {
     let name = taskObj.name;
-    const createDate = new Date().toLocaleDateString();
-    let dueDate = taskObj.dueDate || 'No Due Date';
+    const createDate = format(new Date(), 'dd/MM/yyyy');
+    let dueDate = format(new Date(taskObj.dueDate), 'dd/MM/yyyy') || 'No Due Date';
     let priority = taskObj.priority || 'medium';
     let subTasks = taskObj.subTasks || [];
     let complete = taskObj.complete || false;
- 
+    //format(new Date(2014, 1, 11), 'yyyy-MM-dd')
     // Get attributes
-    const getDetails = { name, createDate, dueDate, priority, subTasks, complete };
+    const getDetails = () => { return {name, createDate, dueDate, priority, subTasks, complete} };
     const getName = () => name;
     const getDueDate = () => dueDate;
     const getPriority = () => priority;
@@ -55,6 +57,7 @@ function task(taskObj) {
         deleteSubTask,
         getComplete,
         toggleComplete,
+        getDetails,
     }
 }
 

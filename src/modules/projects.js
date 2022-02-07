@@ -52,6 +52,13 @@ const projects = (() => {
         updateCurrentProject(0);
     })
 
+    PubSub.subscribe('completeTaskClicked', (msg, data) => {
+        const currentProjectObj = projects[currentProject];
+        const currentTask = projects[currentProject].getTasks()[data.id];
+        currentTask.toggleComplete();
+        PubSub.publish('tasksChanged', currentProjectObj.getTasks());
+    })
+
     return {
         getProjects,
         addProject,
