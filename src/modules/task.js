@@ -1,11 +1,13 @@
 function task(taskObj) {
     let name = taskObj.name;
+    const createDate = new Date().toLocaleDateString();
     let dueDate = taskObj.dueDate || 'No Due Date';
     let priority = taskObj.priority || 'medium';
     let subTasks = taskObj.subTasks || [];
     let complete = taskObj.complete || false;
  
     // Get attributes
+    const getDetails = { name, createDate, dueDate, priority, subTasks, complete };
     const getName = () => name;
     const getDueDate = () => dueDate;
     const getPriority = () => priority;

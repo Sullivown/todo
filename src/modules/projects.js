@@ -17,6 +17,8 @@ const projects = (() => {
     // Add project
     const addProject = (newProject) => {
         projects.push(newProject);
+        const index = projects.indexOf(newProject);
+        currentProject = index;
         PubSub.publish('projectsChanged', { currentProject, projects });
     }
 
@@ -40,11 +42,14 @@ const projects = (() => {
     )
 
     PubSub.subscribe('addTaskClicked', (msg, data) => {
-        console.log('pubsub working');
         const currentProjectObj = projects[currentProject];
-        const newTask = task({ 'name': data });
+        const newTask = task({ 'name': data.name, 'dueDate': data.dueDate });
 
         currentProjectObj.addTask(newTask);
+    })
+
+    PubSub.subscribe('dataLoaded', () => {
+        updateCurrentProject(0);
     })
 
     return {

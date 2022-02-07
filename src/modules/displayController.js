@@ -64,9 +64,15 @@ const displayController = (function() {
         const addTaskDiv = document.createElement('div');
         tasksDiv.appendChild(addTaskDiv);
 
-        const addTaskInput = document.createElement('input');
-        addTaskInput.setAttribute('id', 'add-task-input');
-        addTaskDiv.appendChild(addTaskInput);
+        const addTaskNameInput = document.createElement('input');
+        addTaskNameInput.setAttribute('id', 'add-task-input-name');
+        addTaskNameInput.setAttribute('type', 'text');
+        addTaskDiv.appendChild(addTaskNameInput);
+
+        const addTaskDateInput = document.createElement('input');
+        addTaskDateInput.setAttribute('id', 'add-task-input-date');
+        addTaskDateInput.setAttribute('type', 'date');
+        addTaskDiv.appendChild(addTaskDateInput);
 
         const addTaskButton = document.createElement('button');
         addTaskButton.textContent = 'Add New Task'
@@ -106,9 +112,14 @@ const displayController = (function() {
     }
 
     const handleAddTaskClick = () => {
-        const addTaskInput = document.getElementById('add-task-input');
-        PubSub.publish('addTaskClicked', addTaskInput.value);
-        addTaskInput.value = '';
+        const addTaskNameInput = document.getElementById('add-task-input-name');
+        const addTaskDateInput = document.getElementById('add-task-input-date');
+        PubSub.publish('addTaskClicked', {
+            'name': addTaskNameInput.value,
+            'dueDate': addTaskDateInput.value
+        });
+        console.log('Add Task clicked');
+        addTaskNameInput.value = '';
     }
 
     // Pub/Sub

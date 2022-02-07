@@ -24,8 +24,6 @@ function loadData() {
             const newTask = task(data.projects[projectObj].tasks[taskObj]);
             newProject.addTask(newTask);
         }
-
-        PubSub.publish('projectClicked', projectObj);
     }
 
     console.log('Data has been loaded!');
