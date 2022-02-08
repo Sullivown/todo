@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js';
+import task from './task';
 
 const displayController = (function() {
     // Cache DOM
@@ -63,6 +64,7 @@ const displayController = (function() {
         tasksDiv.innerHTML = '';
         
         const addTaskDiv = document.createElement('div');
+        addTaskDiv.setAttribute('id', 'add-task-div');
         tasksDiv.appendChild(addTaskDiv);
 
         const addTaskNameInput = document.createElement('input');
@@ -88,6 +90,7 @@ const displayController = (function() {
             const taskLi = document.createElement('li');
             taskLi.dataset.taskId = task;
             taskLi.classList.add('task-li');
+            taskLi.addEventListener('click', handleExpandTaskClick);
 
             const completedCheckbox = document.createElement('input');
             completedCheckbox.setAttribute('type', 'checkbox');
@@ -117,6 +120,21 @@ const displayController = (function() {
         tasksDiv.appendChild(taskList);
     }
 
+    const expandTask = (taskObj) => {
+        const task = taskObj.getDetails();
+        const taskDetailsModal = document.createElement('div');
+        taskDetailsModal.classList.add('task-details-modal-background');
+
+        const taskDetailsDiv = document.createElement('div');
+        taskDetailsDiv.classList.add('task-details-modal-div');
+        taskDetailsDiv.textContent = task.name;
+
+        taskDetailsModal.appendChild(taskDetailsDiv);;
+
+        const body = document.querySelector('body');
+        body.appendChild(taskDetailsModal);
+    }
+
     // Click handlers
     const handleProjectClick = (event) => {
         PubSub.publish('projectClicked', parseInt(event.target.dataset.projectId))
@@ -144,6 +162,13 @@ const displayController = (function() {
         })
     }
 
+    const handleExpandTaskClick = (event) => {
+        if (event.target.nodeName !== 'INPUT') {
+            const taskId = event.target.parentNode.dataset.taskId || event.target.dataset.taskId;
+            PubSub.publish('expandTaskClicked', { taskId });
+        };
+    }
+
     // Pub/Sub
     PubSub.subscribe('DOMLoaded', initRender);
 
@@ -164,6 +189,10 @@ const displayController = (function() {
 
     PubSub.subscribe('tasksChanged', (msg, data) => {
         renderTasks(data);
+    })
+
+    PubSub.subscribe('taskDataSent', (msg, data) => {
+        expandTask(data);
     })
 
     return {

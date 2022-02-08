@@ -59,6 +59,11 @@ const projects = (() => {
         PubSub.publish('tasksChanged', currentProjectObj.getTasks());
     })
 
+    PubSub.subscribe('expandTaskClicked', (msg, data) => {
+        const taskObj = projects[currentProject].getTasks()[data.taskId];
+        PubSub.publish('taskDataSent', taskObj);
+    })
+
     return {
         getProjects,
         addProject,

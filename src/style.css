@@ -52,14 +52,16 @@ main {
 }
 
 #task-list {
+    display: flex;
+    flex-direction: column;
     padding-inline-start: 0px;
+    gap: 10px;
 }
 
 .task-li {
     display: flex;
     align-items: center;
     padding: 1rem;
-    margin: 1rem;
     background-color: silver;
     border-radius: 5px;
     gap: 10px;
@@ -71,6 +73,22 @@ main {
 
 .task-complete {
     background-color: beige;
+}
+
+.task-details-modal-background {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 0, 0, 0.3);
+    height: 100vh;
+    width: 100vw;
+}
+
+.task-details-modal-div {
+    background-color: green;
+    padding: 25px;
+    opacity: 1;
 }
 
 footer {
