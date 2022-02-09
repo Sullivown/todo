@@ -1,5 +1,7 @@
 import PubSub from 'pubsub-js';
-import task from './task';
+import { capitalizeFirstLetter } from './helpers';
+import { format } from 'date-fns';
+
 
 const displayController = (function() {
     // Cache DOM
@@ -103,7 +105,7 @@ const displayController = (function() {
 
             const dueDateSpan = document.createElement('span');
             dueDateSpan.classList.add('due-date-span');
-            dueDateSpan.textContent = currentTask.dueDate;
+            dueDateSpan.textContent = format(new Date(currentTask.dueDate), 'dd/MM/yyyy');
             taskLi.appendChild(dueDateSpan);
 
             // Task complete/incomplete logic
@@ -112,8 +114,6 @@ const displayController = (function() {
                 taskLi.classList.add('task-complete');
             };
 
-            
-            
             taskList.appendChild(taskLi)
         }
 
@@ -127,7 +127,75 @@ const displayController = (function() {
 
         const taskDetailsDiv = document.createElement('div');
         taskDetailsDiv.classList.add('task-details-modal-div');
-        taskDetailsDiv.textContent = task.name;
+        taskDetailsDiv.dataset.taskId = taskObj.id;
+        
+        // Task name
+        const nameInput = document.createElement('input');
+        nameInput.setAttribute('id', 'name-input');
+        nameInput.value = task.name;
+        const nameLabel = document.createElement('label');
+        nameLabel.setAttribute('for', 'name-input');
+        nameLabel.textContent = 'Task:';
+        taskDetailsDiv.appendChild(nameLabel);
+        taskDetailsDiv.appendChild(nameInput);
+        
+        // Due date
+        const dueDateInput = document.createElement('input');
+        dueDateInput.setAttribute('id', 'due-date-input');
+        dueDateInput.setAttribute('type', 'date');
+        dueDateInput.value = task.dueDate;
+        const dueDateLabel = document.createElement('label');
+        dueDateLabel.setAttribute('for', 'due-date-input');
+        dueDateLabel.textContent = 'Due Date:';
+        taskDetailsDiv.appendChild(dueDateLabel)
+        taskDetailsDiv.appendChild(dueDateInput);
+
+        // Priority
+        const priorityInput = document.createElement('select');
+        priorityInput.setAttribute('id', 'priority-input')
+        const priorityLabel = document.createElement('label');
+        priorityLabel.setAttribute('for', 'priority-input');
+        priorityLabel.textContent = 'Priority:';
+
+        // Array of priority options
+        const priorityArr = ['high', 'medium', 'low'];
+        for (const item in priorityArr) {
+            const option = document.createElement('option');
+            option.value = priorityArr[item];
+            option.textContent = capitalizeFirstLetter(priorityArr[item]);
+
+            if (option.value == task.priority) {
+                option.selected = true;
+            }
+
+            priorityInput.appendChild(option);
+        }
+
+        taskDetailsDiv.appendChild(priorityLabel);
+        taskDetailsDiv.appendChild(priorityInput);
+
+        // Description
+        const descriptionInput = document.createElement('textarea');
+        descriptionInput.setAttribute('id', 'description-input');
+        descriptionInput.textContent = task.description;
+        const descriptionLabel = document.createElement('label');
+        descriptionLabel.textContent = 'Description:';
+        taskDetailsDiv.appendChild(descriptionLabel);
+        taskDetailsDiv.appendChild(descriptionInput);
+
+        // Controls
+        const controlsDiv = document.createElement('div');
+        controlsDiv.setAttribute('id', 'task-modal-controls');
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.addEventListener('click', handleSaveTaskClick);
+        controlsDiv.appendChild(saveButton);
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.addEventListener('click', handleTaskCloseClick);
+        controlsDiv.appendChild(closeButton);
+
+        taskDetailsDiv.appendChild(controlsDiv);
 
         taskDetailsModal.appendChild(taskDetailsDiv);;
 
@@ -169,6 +237,23 @@ const displayController = (function() {
         };
     }
 
+    const handleSaveTaskClick = (event) => {
+        // Get input values, put into an obj and send to pubsub
+        const task = {
+            'id': document.querySelector('.task-details-modal-div').dataset.taskId,
+            'name': document.querySelector('#name-input').value,
+            'dueDate': document.querySelector('#due-date-input').value,
+            'priority': document.querySelector('#priority-input').value,
+            'description': document.querySelector('#description-input').value
+        }
+
+        PubSub.publish('taskEdited', task);
+    }
+
+    const handleTaskCloseClick = (modal) => {
+        document.querySelector('.task-details-modal-background').remove();
+    }
+
     // Pub/Sub
     PubSub.subscribe('DOMLoaded', initRender);
 
@@ -193,6 +278,10 @@ const displayController = (function() {
 
     PubSub.subscribe('taskDataSent', (msg, data) => {
         expandTask(data);
+    })
+
+    PubSub.subscribe('taskEditComplete', (msg, data) => {
+        handleTaskCloseClick();
     })
 
     return {

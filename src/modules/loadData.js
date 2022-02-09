@@ -3,6 +3,7 @@ import projects from './projects';
 import project from './project';
 import task from './task';
 import PubSub from 'pubsub-js';
+import { format } from 'date-fns';
 
 function getData() {
     const localStorageData = null;
@@ -22,6 +23,7 @@ function loadData() {
 
         for (const taskObj in data.projects[projectObj].tasks) {
             const newTask = task(data.projects[projectObj].tasks[taskObj]);
+            newTask.setDueDate(format(new Date(newTask.getDueDate()), 'yyyy-MM-dd'));
             newProject.addTask(newTask);
         }
     }

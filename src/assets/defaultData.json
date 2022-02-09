@@ -7,22 +7,19 @@
                     "name": "Task 1",
                     "dueDate": "01/02/2023",
                     "priority": "medium",
-                    "complete": false,
-                    "subtasks": []
+                    "complete": false
                 },
                 {
                     "name": "Task 2",
                     "dueDate": "02/03/2024",
                     "priority": "high",
-                    "complete": true,
-                    "subtasks": []
+                    "complete": true
                 },
                 {
                     "name": "Task 3",
                     "dueDate": "12/05/2022",
                     "priority": "low",
-                    "complete": false,
-                    "subtasks": []
+                    "complete": false
                 }
             ]
         },
@@ -33,22 +30,19 @@
                     "name": "Task 12",
                     "dueDate": "01/02/2023",
                     "priority": "medium",
-                    "complete": false,
-                    "subtasks": []
+                    "complete": false
                 },
                 {
                     "name": "Task 22",
                     "dueDate": "02/03/2024",
                     "priority": "high",
-                    "complete": true,
-                    "subtasks": []
+                    "complete": true
                 },
                 {
                     "name": "Task 32",
                     "dueDate": "12/05/2022",
                     "priority": "low",
-                    "complete": false,
-                    "subtasks": []
+                    "complete": false
                 }
             ]
         }

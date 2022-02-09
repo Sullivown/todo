@@ -1,4 +1,4 @@
-import PubSub from "pubsub-js";
+import PubSub, { publish } from "pubsub-js";
 import project from "./project";
 import task from "./task";
 
@@ -61,7 +61,16 @@ const projects = (() => {
 
     PubSub.subscribe('expandTaskClicked', (msg, data) => {
         const taskObj = projects[currentProject].getTasks()[data.taskId];
-        PubSub.publish('taskDataSent', taskObj);
+        PubSub.publish('taskDataSent', Object.assign(taskObj, { 'id': data.taskId }));
+    })
+
+    PubSub.subscribe('taskEdited', (msg, data) => {
+        const currentTask = projects[currentProject].getTasks()[data.id];
+        currentTask.editDetails(data);
+
+        const currentProjectObj = projects[currentProject];
+        PubSub.publish('tasksChanged', currentProjectObj.getTasks());
+        PubSub.publish('taskEditComplete');
     })
 
     return {
