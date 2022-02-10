@@ -1,22 +1,25 @@
 {
     "projects": [
         {
-            "name": "Project 1",
+            "name": "Example Project",
             "tasks": [
                 {
-                    "name": "Task 1",
+                    "name": "Example Task 1",
+                    "createDate": "1/01/2022",
                     "dueDate": "01/02/2023",
                     "priority": "medium",
                     "complete": false
                 },
                 {
-                    "name": "Task 2",
+                    "name": "Example Task 2",
+                    "createDate": "1/01/2022",
                     "dueDate": "02/03/2024",
                     "priority": "high",
                     "complete": true
                 },
                 {
-                    "name": "Task 3",
+                    "name": "Example Task 3",
+                    "createDate": "1/01/2022",
                     "dueDate": "12/05/2022",
                     "priority": "low",
                     "complete": false

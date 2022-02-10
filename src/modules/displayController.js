@@ -59,7 +59,6 @@ const displayController = (function() {
 
             projectsList.appendChild(projectLi);
         }
-        console.log('Projects rendered');
     }
 
     const renderTasks = (tasks) => {
@@ -119,7 +118,6 @@ const displayController = (function() {
         }
 
         tasksDiv.appendChild(taskList);
-        console.log('Tasks rendered')
     }
 
     const expandTask = (taskObj) => {
@@ -213,6 +211,7 @@ const displayController = (function() {
     const handleAddProjectClick = () => {
         const addProjectInput = document.getElementById('add-project-input');
         PubSub.publish('addProjectClicked', addProjectInput.value);
+        PubSub.publish('updateLocalStorage');
         addProjectInput.value = '';
     }
 
@@ -223,12 +222,14 @@ const displayController = (function() {
         }
         const processedTask = processTaskForm(task);
         PubSub.publish('addTaskClicked', processedTask);
+        PubSub.publish('updateLocalStorage');
     }
 
     const handleTaskCompletedClick = (event) => {
         PubSub.publish('completeTaskClicked', {
             'id': event.target.parentNode.dataset.taskId
         })
+        PubSub.publish('updateLocalStorage');
     }
 
     const handleExpandTaskClick = (event) => {
@@ -251,6 +252,7 @@ const displayController = (function() {
         const processedTask = processTaskForm(task);
 
         PubSub.publish('taskEdited', processedTask);
+        PubSub.publish('updateLocalStorage');
     }
 
     const handleTaskCloseClick = (modal) => {

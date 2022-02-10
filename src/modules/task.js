@@ -2,8 +2,8 @@ import { format } from 'date-fns';
 
 function task(taskObj) {
     let name = taskObj.name;
-    const createDate = format(new Date(), 'dd/MM/yyyy');
-    let dueDate = taskObj.dueDate == 'No Due Date' ?  'No Due Date' : format(new Date(taskObj.dueDate), 'dd/MM/yyyy');
+    const createDate = format(new Date(), 'yyyy-MM-dd');
+    let dueDate = taskObj.dueDate == 'No Due Date' ?  'No Due Date' : format(new Date(taskObj.dueDate), 'yyyy-MM-dd');
     let priority = taskObj.priority || 'medium';
     let description = taskObj.description || '';
     let complete = taskObj.complete || false;
@@ -18,7 +18,7 @@ function task(taskObj) {
     // Edit project attributes
     const editDetails = (attribs) => {
         setName(attribs.name);
-        setDueDate(attribs.dueDate);
+        setDueDate(format(new Date(attribs.dueDate), 'yyyy-MM-dd'));
         setPriority(attribs.priority);
         setDescription(attribs.description);
     }
