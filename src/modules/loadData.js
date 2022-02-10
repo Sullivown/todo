@@ -27,8 +27,7 @@ function loadData() {
             newProject.addTask(newTask);
         }
     }
-
-    console.log('Data has been loaded!');
+    
     PubSub.publish('dataLoaded');
     
 }

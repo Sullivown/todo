@@ -1,5 +1,5 @@
 import PubSub from 'pubsub-js';
-import { capitalizeFirstLetter } from './helpers';
+import { capitalizeFirstLetter, processTaskForm } from './helpers';
 import { format } from 'date-fns';
 
 
@@ -105,7 +105,7 @@ const displayController = (function() {
 
             const dueDateSpan = document.createElement('span');
             dueDateSpan.classList.add('due-date-span');
-            dueDateSpan.textContent = format(new Date(currentTask.dueDate), 'dd/MM/yyyy');
+            dueDateSpan.textContent = currentTask.dueDate == 'No Due Date' ? 'No Due Date' : format(new Date(currentTask.dueDate), 'dd/MM/yyyy');
             taskLi.appendChild(dueDateSpan);
 
             // Task complete/incomplete logic
@@ -215,13 +215,12 @@ const displayController = (function() {
     }
 
     const handleAddTaskClick = () => {
-        const addTaskNameInput = document.getElementById('add-task-input-name');
-        const addTaskDateInput = document.getElementById('add-task-input-date');
-        PubSub.publish('addTaskClicked', {
-            'name': addTaskNameInput.value,
-            'dueDate': addTaskDateInput.value
-        });
-        addTaskNameInput.value = '';
+        const task = {
+            'name': document.getElementById('add-task-input-name').value,
+            'dueDate': document.getElementById('add-task-input-date').value,
+        }
+        const processedTask = processTaskForm(task);
+        PubSub.publish('addTaskClicked', processedTask);
     }
 
     const handleTaskCompletedClick = (event) => {
@@ -247,7 +246,9 @@ const displayController = (function() {
             'description': document.querySelector('#description-input').value
         }
 
-        PubSub.publish('taskEdited', task);
+        const processedTask = processTaskForm(task);
+
+        PubSub.publish('taskEdited', processedTask);
     }
 
     const handleTaskCloseClick = (modal) => {

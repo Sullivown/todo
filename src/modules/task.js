@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 function task(taskObj) {
     let name = taskObj.name;
     const createDate = format(new Date(), 'dd/MM/yyyy');
-    let dueDate = format(new Date(taskObj.dueDate), 'dd/MM/yyyy') || 'No Due Date';
+    let dueDate = taskObj.dueDate == 'No Due Date' ?  'No Due Date' : format(new Date(taskObj.dueDate), 'dd/MM/yyyy');
     let priority = taskObj.priority || 'medium';
     let description = taskObj.description || '';
     let complete = taskObj.complete || false;
