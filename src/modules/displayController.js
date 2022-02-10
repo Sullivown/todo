@@ -10,7 +10,7 @@ const displayController = (function() {
     // Initial render to set up page structure
     const initRender = () => {
         const header = document.createElement('header');
-        header.textContent = 'This is the header';
+        header.textContent = 'ToDoodle Bug';
         body.appendChild(header);
 
         const main = document.createElement('main');
@@ -59,6 +59,7 @@ const displayController = (function() {
 
             projectsList.appendChild(projectLi);
         }
+        console.log('Projects rendered');
     }
 
     const renderTasks = (tasks) => {
@@ -118,6 +119,7 @@ const displayController = (function() {
         }
 
         tasksDiv.appendChild(taskList);
+        console.log('Tasks rendered')
     }
 
     const expandTask = (taskObj) => {

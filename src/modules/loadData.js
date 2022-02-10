@@ -6,14 +6,17 @@ import PubSub from 'pubsub-js';
 import { format } from 'date-fns';
 
 function getData() {
-    const localStorageData = null;
-
     // If local storage exists, load from there else use default data
-    let data = localStorageData || defaultData.default;
-    return data;
+    let data = localStorage.getItem('todos');
+    if (!data) {
+        data = JSON.stringify(defaultData.default);
+        localStorage.setItem('todos', data);
+    }
+    console.log(data);
+    return JSON.parse(data);
 }
 
-// Processes json data and adds it to thet projects module
+// Processes JSON data and adds it to the projects module
 function loadData() {
     const data = getData();
     
@@ -27,11 +30,17 @@ function loadData() {
             newProject.addTask(newTask);
         }
     }
-    
+
     PubSub.publish('dataLoaded');
-    
 }
 
+function updateLocalStorage() {
+    console.log('Local storage updated')
+    localStorage.setItem('todos', JSON.stringify(projects));
+}
+
+
 PubSub.subscribe('initRenderComplete', loadData);
+// sPubSub.subscribe('updateLocalStorage', updateLocalStorage);
 
 export default loadData;

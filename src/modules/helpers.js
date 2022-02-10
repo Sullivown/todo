@@ -8,7 +8,7 @@ function processTaskForm(taskObj) {
     };
 
     if (taskObj.name == '') {
-        taskObj.name = 'Unnamed task'
+        taskObj.name = 'Unnamed task';
     }
 
     return taskObj;
