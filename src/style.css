@@ -8,12 +8,16 @@ body {
     flex-direction: column;
     margin: 0px;
     box-sizing: border-box;
+    font-family: sans-serif;
+    background-color: #1F2937;
+    color: #F9FAF8;
 }
 
 header {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     padding: 25px;
+    border-bottom: 1px solid #F9FAF8;
 }
 
 main {
@@ -30,7 +34,7 @@ main {
 
 #projects {
     flex: 1;
-    background-color: antiquewhite;
+    border-right: 1px solid #F9FAF8;
 }
 
 #projects-list {
@@ -40,31 +44,61 @@ main {
 
 #projects-list li {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 1rem;
     margin: 1rem;
-    background-color: silver;
+}
+
+#projects-list li:hover {
+    background-color: rgba(249, 250, 248, 0.1);
     border-radius: 5px;
+}
+
+.current-project {
+    background-color: rgba(249, 250, 248, 0.3);
+    border-radius: 5px;
+}
+
+hr {
+    width: 100%;
+}
+
+.centered-header {
+    text-align: center;
 }
 
 #tasks {
     flex: 4;
-    background-color: aquamarine;
+}
+
+#add-task-div {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+#add-task-div label {
+    align-self: center;
 }
 
 #task-list {
     display: flex;
     flex-direction: column;
     padding-inline-start: 0px;
-    gap: 10px;
 }
 
 .task-li {
     display: flex;
     align-items: center;
     padding: 1rem;
-    background-color: silver;
-    border-radius: 5px;
+    border-bottom: 1px solid #F9FAF8;
     gap: 10px;
+}
+
+.task-li:hover {
+    background-color: rgba(249, 250, 248, 0.1);
 }
 
 .due-date-span {
@@ -72,7 +106,7 @@ main {
 }
 
 .task-complete {
-    background-color: beige;
+    text-decoration: line-through;
 }
 
 .task-details-modal-background {
@@ -80,19 +114,55 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
     height: 100vh;
     width: 100vw;
 }
 
 .task-details-modal-div {
-    background-color: green;
-    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    background-color: #1F2937;
+    padding: 2rem;
     opacity: 1;
 }
 
 label {
     display: block;
+}
+
+.task-details-modal-div input,
+.task-details-modal-div select,
+.task-details-modal-div textarea {
+    margin-bottom: 1rem;
+}
+
+input,
+select,
+textarea {
+    padding: 10px;
+    min-height: 2rem;
+    border-radius: 5px;
+    font-family: sans-serif;
+    border: none;
+}
+
+textarea {
+    min-width: 5rem;
+    min-height: 5rem;
+}
+
+button {
+    padding: 10px;
+    border: 1px solid #F9FAF8;
+    border-radius: 5px;
+    background-color: #1F2937;
+    color: #F9FAF8;
+}
+
+button:hover {
+    background-color: #F9FAF8;
+    color: #1F2937;
 }
 
 footer {

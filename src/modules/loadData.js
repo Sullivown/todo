@@ -48,13 +48,11 @@ function updateLocalStorage() {
         const tasksArr = projectsArr[project].getTasks();
         for (const task in tasksArr) {
             const newTask = tasksArr[task].getDetails();
-            console.log(newTask);
             projectsObj.projects[project].tasks.push(newTask);
         }
 
     }
 
-    console.log(projectsObj)
     localStorage.setItem('todos', JSON.stringify(projectsObj));
 }
 

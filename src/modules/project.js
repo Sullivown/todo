@@ -1,7 +1,7 @@
 import PubSub from "pubsub-js";
 
 function project(projectObj) {
-    let name = projectObj.name;
+    let name = projectObj.name || 'Unnamed Project';
     let tasks = [];
 
     // Get attributes

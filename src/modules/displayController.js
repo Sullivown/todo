@@ -10,7 +10,9 @@ const displayController = (function() {
     // Initial render to set up page structure
     const initRender = () => {
         const header = document.createElement('header');
-        header.textContent = 'ToDoodle Bug';
+        const headerH1 = document.createElement('h1');
+        headerH1.textContent = 'ToDoodle Bug';
+        header.appendChild(headerH1);
         body.appendChild(header);
 
         const main = document.createElement('main');
@@ -18,10 +20,23 @@ const displayController = (function() {
 
         const projects = document.createElement('div');
         projects.setAttribute('id', 'projects');
+
+        const projectsHeader = document.createElement('h2');
+        projectsHeader.textContent = 'Projects';
+        projectsHeader.classList.add('centered-header');
+        projects.appendChild(projectsHeader);
         
         const projectsList = document.createElement('ul');
         projectsList.setAttribute('id', 'projects-list');
         projects.appendChild(projectsList);
+
+        const hr = document.createElement('hr');
+        projects.appendChild(hr);
+
+        const addProjectHeader = document.createElement('h2');
+        addProjectHeader.textContent = 'Add New Project';
+        addProjectHeader.classList.add('centered-header');
+        projects.appendChild(addProjectHeader);
 
         const addProjectInput = document.createElement('input');
         addProjectInput.setAttribute('type', 'text');
@@ -41,13 +56,13 @@ const displayController = (function() {
         main.appendChild(tasks);
 
         const footer = document.createElement('footer');
-        footer.textContent = 'This is the footer';
+        footer.textContent = 'ToDoodle Bug';
         body.appendChild(footer);
 
         PubSub.publish('initRenderComplete');
     }
 
-    const renderProjects = (projects) => {
+    const renderProjects = (projects, currentProject) => {
         const projectsList = document.getElementById('projects-list');
         projectsList.innerHTML = '';
 
@@ -56,6 +71,15 @@ const displayController = (function() {
             projectLi.dataset.projectId = project;
             projectLi.textContent += projects[project].getName();
             projectLi.addEventListener('click', handleProjectClick);
+
+            // Currently selected task logic
+            if (project == currentProject) {
+                projectLi.classList.add('current-project');
+                const deleteProjectButton = document.createElement('button');
+                deleteProjectButton.textContent = 'Delete';
+                deleteProjectButton.addEventListener('click', handleDeleteClick);
+                projectLi.appendChild(deleteProjectButton);
+            }
 
             projectsList.appendChild(projectLi);
         }
@@ -68,6 +92,11 @@ const displayController = (function() {
         const addTaskDiv = document.createElement('div');
         addTaskDiv.setAttribute('id', 'add-task-div');
         tasksDiv.appendChild(addTaskDiv);
+
+        const addTaskLabel = document.createElement('label');
+        addTaskLabel.textContent = 'Add New Task:';
+        addTaskLabel.setAttribute('for', 'add-task-input-name');
+        addTaskDiv.appendChild(addTaskLabel);
 
         const addTaskNameInput = document.createElement('input');
         addTaskNameInput.setAttribute('id', 'add-task-input-name');
@@ -205,7 +234,11 @@ const displayController = (function() {
 
     // Click handlers
     const handleProjectClick = (event) => {
-        PubSub.publish('projectClicked', parseInt(event.target.dataset.projectId))
+        const senderElement = event.target;
+        // Check if project, and not the delete button, has been clicked
+        if (senderElement instanceof HTMLLIElement) {
+            PubSub.publish('projectClicked', parseInt(event.target.dataset.projectId));
+        }
     }
 
     const handleAddProjectClick = () => {
@@ -259,23 +292,20 @@ const displayController = (function() {
         document.querySelector('.task-details-modal-background').remove();
     }
 
+    const handleDeleteClick = (event) => {
+        const projectId = event.target.parentNode.dataset.projectId;
+        PubSub.publish('deleteProject', projectId);
+    }
+
     // Pub/Sub
     PubSub.subscribe('DOMLoaded', initRender);
 
     PubSub.subscribe('projectsChanged', (msg, data) => {
-        renderProjects(data.projects);
+        const { currentProject, projects } = data;
+        renderProjects(projects, currentProject);
+        renderTasks(data.projects[currentProject].getTasks());
         }
     );
-    
-    PubSub.subscribe('projectsChanged', (msg, data) => {
-        const { currentProject, projects } = data;
-        renderTasks(data.projects[currentProject].getTasks());
-    });
-
-    PubSub.subscribe('currentProjectChanged', (msg, data) => {
-        const { currentProject, projectObj } = data;
-        renderTasks(projectObj.getTasks());
-    });
 
     PubSub.subscribe('tasksChanged', (msg, data) => {
         renderTasks(data);
