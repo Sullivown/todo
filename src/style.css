@@ -127,6 +127,12 @@ hr {
     opacity: 1;
 }
 
+#task-modal-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
 label {
     display: block;
 }
@@ -165,9 +171,26 @@ button:hover {
     color: #1F2937;
 }
 
+.delete-button {
+    background-color: red;
+}
+
+.priority-high {
+    color: red;
+}
+
+.priority-medium {
+    color: yellow;
+}
+
+.priority-low {
+    color: #F9FAF8;
+}
+
 footer {
     display: flex;
     justify-content: center;
     padding: 25px;
     margin-top: auto;
+    border-top: 1px solid #F9FAF8;
 }

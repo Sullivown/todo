@@ -77,7 +77,7 @@ const displayController = (function() {
                 projectLi.classList.add('current-project');
                 const deleteProjectButton = document.createElement('button');
                 deleteProjectButton.textContent = 'Delete';
-                deleteProjectButton.addEventListener('click', handleDeleteClick);
+                deleteProjectButton.addEventListener('click', handleProjectDeleteClick);
                 projectLi.appendChild(deleteProjectButton);
             }
 
@@ -142,6 +142,10 @@ const displayController = (function() {
                 completedCheckbox.checked = true;
                 taskLi.classList.add('task-complete');
             };
+
+            // Task priority
+            const taskPriorityClass = `priority-${currentTask.priority}`;
+            taskLi.classList.add(taskPriorityClass);
 
             taskList.appendChild(taskLi)
         }
@@ -219,6 +223,11 @@ const displayController = (function() {
         saveButton.textContent = 'Save';
         saveButton.addEventListener('click', handleSaveTaskClick);
         controlsDiv.appendChild(saveButton);
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('delete-button');
+        deleteButton.addEventListener('click', handleTaskDeleteClick);
+        controlsDiv.appendChild(deleteButton);
         const closeButton = document.createElement('button');
         closeButton.textContent = 'Close';
         closeButton.addEventListener('click', handleTaskCloseClick);
@@ -244,7 +253,6 @@ const displayController = (function() {
     const handleAddProjectClick = () => {
         const addProjectInput = document.getElementById('add-project-input');
         PubSub.publish('addProjectClicked', addProjectInput.value);
-        PubSub.publish('updateLocalStorage');
         addProjectInput.value = '';
     }
 
@@ -255,14 +263,12 @@ const displayController = (function() {
         }
         const processedTask = processTaskForm(task);
         PubSub.publish('addTaskClicked', processedTask);
-        PubSub.publish('updateLocalStorage');
     }
 
     const handleTaskCompletedClick = (event) => {
         PubSub.publish('completeTaskClicked', {
             'id': event.target.parentNode.dataset.taskId
         })
-        PubSub.publish('updateLocalStorage');
     }
 
     const handleExpandTaskClick = (event) => {
@@ -285,16 +291,21 @@ const displayController = (function() {
         const processedTask = processTaskForm(task);
 
         PubSub.publish('taskEdited', processedTask);
-        PubSub.publish('updateLocalStorage');
     }
 
     const handleTaskCloseClick = (modal) => {
         document.querySelector('.task-details-modal-background').remove();
     }
 
-    const handleDeleteClick = (event) => {
+    const handleProjectDeleteClick = (event) => {
         const projectId = event.target.parentNode.dataset.projectId;
         PubSub.publish('deleteProject', projectId);
+    }
+
+    const handleTaskDeleteClick = (event) => {
+        const taskId = event.target.parentNode.parentNode.dataset.taskId;
+        console.log(taskId)
+        PubSub.publish('deleteTask', taskId);
     }
 
     // Pub/Sub

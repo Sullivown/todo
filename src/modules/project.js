@@ -18,12 +18,14 @@ function project(projectObj) {
     const addTask = (task) => {
         tasks.push(task);
         PubSub.publish('tasksChanged', tasks);
+        PubSub.publish('updateLocalStorage');
     }
 
     // Delete task
-    const deleteTask = (task) => {
-        const index = tasks.indexOf(task);
-        tasks.splice(index, 1);
+    const deleteTask = (taskId) => {;
+        tasks.splice(taskId, 1);
+        PubSub.publish('tasksChanged', tasks);
+        PubSub.publish('updateLocalStorage');
     }
 
     return {

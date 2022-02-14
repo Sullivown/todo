@@ -19,6 +19,7 @@ const projects = (() => {
         const index = projects.indexOf(newProject);
         currentProject = index;
         PubSub.publish('projectsChanged', { currentProject, projects });
+        PubSub.publish('updateLocalStorage');
     }
 
     // Delete project
@@ -74,8 +75,15 @@ const projects = (() => {
         PubSub.publish('taskEditComplete');
     })
 
+    PubSub.subscribe('deleteTask', (msg, data) => {
+        const currentProjectObj = projects[currentProject];
+        currentProjectObj.deleteTask(data);
+        PubSub.publish('taskEditComplete');
+    })
+
     PubSub.subscribe('deleteProject', (msg, data) => {
-        deleteProject(data.projectId);
+        const project = projects[data];
+        deleteProject(project);
     })
 
     return {
