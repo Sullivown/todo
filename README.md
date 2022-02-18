@@ -1,5 +1,6 @@
 # ToDoodle Bug
-To-do list app project from [The Odin Project](https://www.theodinproject.com)
+To-do list app project from [The Odin Project](https://www.theodinproject.com).
+[View Live](https://sullivown.github.io/todo/)
 
 ## About
 To do list project designed around the SOLID design principles.
